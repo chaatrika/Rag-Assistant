@@ -1,10 +1,8 @@
 import streamlit as st
 from dotenv import load_dotenv
 import os
-
 load_dotenv()
 from rag import process_urls, generate_answer
-
 st.title("RAG based Website Assistant")
 
 url1 = st.sidebar.text_input("URL-1")
