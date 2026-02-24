@@ -21,11 +21,13 @@ def initialize_components():
     global llm, vector_store
 
     if llm is None:
-        llm = ChatGroq(
-            model = "llama-3.3-70b-versatile",
-            temperature= 0.9,
-            max_tokens = 1000
-        )
+        import os
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0.9,
+    max_tokens=1000,
+    api_key=os.environ.get("GROQ_API_KEY")
+)
     if vector_store is None:
         embeddings = HuggingFaceEmbeddings(
             model_name = EMBEDDING_MODEL,
