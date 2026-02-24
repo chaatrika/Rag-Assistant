@@ -28,17 +28,12 @@ llm = ChatGroq(
     max_tokens=1000,
     api_key=os.environ.get("GROQ_API_KEY")
 )
-    if vector_store is None:
-        embeddings = HuggingFaceEmbeddings(
-            model_name = EMBEDDING_MODEL,
-            model_kwargs = {"trust_remote_code" : True}
-        )
-
-        vector_store = Chroma(
-            collection_name = COLLECTION_NAME,
-            embedding_function = embeddings,
-            persist_directory=str(VECTORESTORE_DIR)
-        )
+if vector_store is None:
+    embeddings = HuggingFaceEmbeddings(model_name = EMBEDDING_MODEL,model_kwargs = {"trust_remote_code" : True})
+    vector_store = Chroma(
+        collection_name = COLLECTION_NAME,
+        embedding_function = embeddings,
+        persist_directory=str(VECTORESTORE_DIR))
 
 
 def process_urls(urls):
@@ -68,7 +63,9 @@ def process_urls(urls):
     yield "Adding docs chunks into ChromaDB..."
 
     ids = [str(uuid4()) for _ in range(len(docs))]
-
+    if not docs:
+    yield "No documents were processed. Please check the URL."
+    return
     vector_store.add_documents(docs, ids = ids)
 
     yield "Vector store sccessfully updated"
